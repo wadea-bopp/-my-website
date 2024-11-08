@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Gallery</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        /* Prevent links from turning purple after being clicked */
+        a, a:visited {
+            color: inherit;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #f0a500;
+        }
+        /* Header & Search Bar */
+        .header {
+            width: 100%;
+            padding: 20px;
+            background-color: #0f3460;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .header-buttons button {
+            background-color: #e94560;
+            border: none;
+            padding: 10px 15px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .header-buttons button:hover {
+            background-color: #f06d89;
+        }
+        .search-bar {
+            display: flex;
+            width: 70%;
+            max-width: 700px;
+            gap: 10px;
+        }
+        .search-bar input[type="text"], .search-bar input[type="number"] {
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            flex: 1;
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #e94560;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        /* Movie Grid */
+        .movie-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+        .movie-item {
+            background-color: #222831;
+            width: 180px;
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.2s ease;
+            display: block;
+        }
+        .movie-item:hover {
+            transform: scale(1.05);
+        }
+        .movie-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .movie-info {
+            padding: 10px;
+            color: #eee;
+        }
+        .movie-info h3 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+        .movie-info p {
+            font-size: 0.8rem;
+            color: #f0a500;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+        }
+        .modal-content h2 {
+            margin-bottom: 15px;
+        }
+        .modal-content button {
+            background-color: #e94560;
+            border: none;
+            padding: 10px 15px;
+            color: #fff;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .modal-content button:hover {
+            background-color: #f06d89;
+        }
+        .modal-content .close {
+            background-color: transparent;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Genre Modal Button and Search Bar -->
+    <header class="header">
+        <div class="header-buttons">
+            <button onclick="openModal()">Genres</button>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" oninput="searchMovies()" placeholder="أدخل اسم الفيلم">
+            <input type="number" id="yearInput" oninput="searchMovies()" placeholder="أدخل السنة" min="1900" max="2100">
+            <button onclick="searchMovies()">بحث</button>
+        </div>
+    </header>
+
+    <!-- Movie Grid -->
+    <div class="movie-grid" id="movieGrid">
+        <!-- Movie Item Template (Repeat this for each movie) -->
+        <div class="movie-item" data-title="King Arthur" data-genre="Action" data-year="2017">
+            <a href="https://example.com/movie1">
+                <img src="c:\Users\win10\Downloads\51bsz7RhWML._AC_UF894,1000_QL80_.jpg" alt="King Arthur Poster">
+                <div class="movie-info">
+                    <h3>King Arthur</h3>
+                    <p>6.7 ★ | 2017 |<a href="https://www.youtube.com/watch?v=jIM4-HLtUM0&pp=ygUTa2luZyBhcnRodXIgdHJhaWxlcg%3D%3D" target="_blank">trailer</a></p>
+                </div>
+            </a>
+        </div>
+        <div class="movie-item" data-title="Joker 2" data-genre="Drama" data-year="2024">
+            <a href="https://example.com/movie2">
+                <img src="c:\Users\win10\Downloads\הורדה (19).jpg" alt="Joker 2 Poster">
+                <div class="movie-info">
+                    <h3>Joker 2</h3>
+                    <p>7.2 ★ | 2024 |<a href="https://www.youtube.com/watch?v=_OKAwz2MsJs&pp=ygUPam9rZXIgMiB0cmFpbGVy" target="_blank">trailer</a></p>
+                </div>
+            </a>
+        </div>
+        <!-- Add more movies here following the same structure -->
+    </div>
+
+    <!-- Modal for Genre Selection -->
+    <div class="modal" id="genreModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Select a Genre</h2>
+            <button onclick="selectGenre('')">All</button>
+            <button onclick="selectGenre('Comedy')">Comedy</button>
+            <button onclick="selectGenre('Drama')">Drama</button>
+            <button onclick="selectGenre('Action')">Action</button>
+            <button onclick="selectGenre('Horror')">Horror</button>
+        </div>
+    </div>
+
+    <script>
+        // Open the Genre Modal
+        function openModal() {
+            document.getElementById('genreModal').style.display = 'flex';
+        }
+        // Close the Genre Modal
+        function closeModal() {
+            document.getElementById('genreModal').style.display = 'none';
+        }
+        // Select a Genre and Filter Movies
+        function selectGenre(genre) {
+            closeModal();
+            const movies = document.querySelectorAll('.movie-item');
+            movies.forEach(movie => {
+                const movieGenre = movie.getAttribute('data-genre');
+                if (genre === '' || movieGenre === genre) {
+                    movie.style.display = 'block';
+                } else {
+                    movie.style.display = 'none';
+                }
+            });
+        }
+        // Search Movies by Title and Year
+        function searchMovies() {
+            const titleQuery = document.getElementById('searchInput').value.toLowerCase();
+            const yearQuery = document.getElementById('yearInput').value;
+            const movies = document.querySelectorAll('.movie-item');
+            movies.forEach(movie => {
+                const title = movie.getAttribute('data-title').toLowerCase();
+                const year = movie.getAttribute('data-year');
+                if (title.includes(titleQuery) && (yearQuery === '' || year === yearQuery)) {
+                    movie.style.display = 'block';
+                } else {
+                    movie.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
